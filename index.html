@@ -56,7 +56,6 @@
     #map { height: 420px; border-radius: 14px; border: 1px solid var(--card-border); width: 100%; z-index: 1; }
     
     .btn { padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-primary { background: var(--primary); color: white; }
     .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); }
   </style>
 </head>
@@ -85,7 +84,7 @@
   <div class="card">
     <div class="card-title">
       <span>Live Route & GPS Telemetry Simulator</span>
-      <span style="color:#10B981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Simulating Live</span>
+      <span style="color:#10B981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Live Simulation</span>
     </div>
     <div id="map"></div>
     <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.85rem; color:var(--text-muted);">
@@ -98,7 +97,7 @@
   <!-- Right: API Endpoints & Auth Isolation Breakdown -->
   <div class="card">
     <div class="card-title">
-      <span>Enforced API Endpoints & Security</span>
+      <span>Enforced API Endpoints & Architecture</span>
       <span class="badge">JWT Bearer Auth</span>
     </div>
 
@@ -109,22 +108,22 @@
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-route</span></div>
-      <span style="font-size:0.75rem; color:#60A5FA;">Strict: User Route Only</span>
+      <span style="font-size:0.75rem; color:#60A5FA;">Assigned Route & Stops</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-vehicle</span></div>
-      <span style="font-size:0.75rem; color:#60A5FA;">Strict: User Vehicle Only</span>
+      <span style="font-size:0.75rem; color:#60A5FA;">Assigned Vehicle Details</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/current</span></div>
-      <span style="font-size:0.75rem; color:#34D399;">Live GPS Position & Speed</span>
+      <span style="font-size:0.75rem; color:#34D399;">Live GPS Telemetry</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/history</span></div>
-      <span style="font-size:0.75rem; color:var(--text-muted);">GPS Historical Breadcrumb Logs</span>
+      <span style="font-size:0.75rem; color:var(--text-muted);">Historical Breadcrumb Logs</span>
     </div>
 
     <div class="api-item">
@@ -132,9 +131,9 @@
       <span style="font-size:0.75rem; color:var(--accent-amber);">MQTT / REST Telemetry Ingest</span>
     </div>
 
-    <div style="background:linear-gradient(135deg, #1E3A8A, #172554); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-top:16px;">
-      <h4 style="font-size:0.9rem; font-weight:700; color:#93C5FD;"><i class="fa-solid fa-lock"></i> Strict Authorization Rule Verified</h4>
-      <p style="font-size:0.78rem; color:#BFDBFE; margin-top:4px;">User A (Route A / BUS-001) querying Vehicle 2 receives <strong>HTTP 403 Forbidden - Access Denied</strong> automatically enforced by the FastAPI dependency layer.</p>
+    <div style="background:linear-gradient(135deg, #064E3B, #065F46); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:14px; margin-top:16px;">
+      <h4 style="font-size:0.9rem; font-weight:700; color:#6EE7B7;"><i class="fa-solid fa-shield-check"></i> Strict Backend Authorization Active</h4>
+      <p style="font-size:0.78rem; color:#A7F3D0; margin-top:4px;">Backend guarantees that <strong>User A</strong> only accesses <strong>Route A & BUS-001</strong>, and <strong>User B</strong> only accesses <strong>Route B & BUS-002</strong>. Any cross-access is strictly protected at the API dependency layer.</p>
     </div>
   </div>
 </div>
