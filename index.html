@@ -39,24 +39,38 @@
     .brand-icon { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #2563EB, #06B6D4); display: flex; align-items: center; justify-content: center; }
     .badge { background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
     
-    .hero { text-align: center; padding: 40px 20px 20px; max-width: 900px; margin: 0 auto; }
-    .hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #FFF, #93C5FD); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 10px; line-height: 1.6; }
-    
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 24px; width: 100%; flex: 1; }
-    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 24px; }
-    .card-title { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .grid { display: grid; grid-template-columns: 360px 1fr 380px; gap: 20px; max-width: 1650px; margin: 20px auto; padding: 0 24px; width: 100%; flex: 1; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; }
+    .card-title { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
 
-    .api-item { background: #1A2234; border: 1px solid #233044; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-    .api-method { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    /* Stops Timeline */
+    .stops-timeline { flex: 1; overflow-y: auto; max-height: 520px; padding-right: 6px; }
+    .stops-timeline::-webkit-scrollbar { width: 5px; }
+    .stops-timeline::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+
+    .timeline-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; position: relative; }
+    .timeline-item::before { content: ''; position: absolute; left: 7px; top: 22px; bottom: -6px; width: 2px; background: #283548; }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-dot { width: 16px; height: 16px; border-radius: 50%; background: #3B82F6; border: 3px solid var(--card-bg); margin-top: 2px; flex-shrink: 0; z-index: 2; }
+    .timeline-dot.origin { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .timeline-dot.dest { background: #EF4444; box-shadow: 0 0 8px #EF4444; }
+    .timeline-text { flex: 1; }
+    .timeline-name { font-size: 0.84rem; font-weight: 600; color: var(--text-main); }
+    .timeline-desc { font-size: 0.73rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+    .api-item { background: #1A2234; border: 1px solid #233044; border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .api-method { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
     .method-get { background: rgba(16, 185, 129, 0.2); color: #34D399; }
     .method-post { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
-    .api-path { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-main); margin-left: 10px; }
+    .api-path { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-main); margin-left: 8px; }
 
-    #map { height: 420px; border-radius: 14px; border: 1px solid var(--card-border); width: 100%; z-index: 1; }
+    #map { height: 100%; min-height: 480px; border-radius: 14px; border: 1px solid var(--card-border); width: 100%; z-index: 1; }
     
-    .btn { padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn { padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); }
+
+    .user-btn { flex: 1; padding: 8px; border-radius: 10px; border: 1.5px solid #283548; background: #1A2234; color: white; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: all 0.2s; }
+    .user-btn.active { border-color: #3B82F6; background: rgba(59,130,246,0.2); }
   </style>
 </head>
 <body>
@@ -64,8 +78,8 @@
 <header>
   <div class="brand">
     <div class="brand-icon"><i class="fa-solid fa-server"></i></div>
-    <span>GPS Tracking FastAPI Backend</span>
-    <span class="badge">GitHub Pages Live Showcase</span>
+    <span>FastAPI GPS Vehicle Tracking Backend</span>
+    <span class="badge">Live Showcase</span>
   </div>
   <div>
     <a href="https://github.com/aswinkarthikv/gps-vehicle-tracking-backend" target="_blank" class="btn btn-outline">
@@ -74,76 +88,107 @@
   </div>
 </header>
 
-<div class="hero">
-  <h1>Python FastAPI + MQTT Telemetry Backend</h1>
-  <p>Production-ready REST & MQTT telemetry engine enforcing strict route/vehicle authorization isolation, PostgreSQL/SQLite ORM persistence, and Docker Compose orchestration.</p>
-</div>
-
 <div class="grid">
-  <!-- Left: Interactive Map Simulation -->
+  <!-- Left: Scheduled Bus Stops Timeline -->
+  <div class="card">
+    <div class="card-title">
+      <span>Scheduled Bus Stops</span>
+      <span id="stopsCount" style="color:var(--primary); font-weight:700;">10 Points</span>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <button class="user-btn active" id="btnUserA" onclick="switchRoute('A')">Route A (North)</button>
+      <button class="user-btn" id="btnUserB" onclick="switchRoute('B')">Route B (South)</button>
+    </div>
+
+    <h3 id="routeHeader" style="font-size:0.95rem; font-weight:700; color:#60A5FA; margin-bottom:8px;">Route A (North Express)</h3>
+    <div class="stops-timeline" id="stopsTimeline"></div>
+  </div>
+
+  <!-- Middle: Interactive Map Simulation -->
   <div class="card">
     <div class="card-title">
       <span>Live Route & GPS Telemetry Simulator</span>
-      <span style="color:#10B981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Live Simulation</span>
+      <span style="color:#10B981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Live Moving</span>
     </div>
     <div id="map"></div>
-    <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.85rem; color:var(--text-muted);">
+    <div style="display:flex; justify-content:space-between; margin-top:12px; font-size:0.82rem; color:var(--text-muted);">
       <span id="simSpeed">Speed: 42.5 km/h</span>
       <span id="simCoords">Coords: 13.0827, 80.2707</span>
       <span id="simStatus" style="color:#10B981; font-weight:700;">IN_TRANSIT</span>
     </div>
   </div>
 
-  <!-- Right: API Endpoints & Auth Isolation Breakdown -->
+  <!-- Right: API Endpoints & Auth Architecture -->
   <div class="card">
     <div class="card-title">
-      <span>Enforced API Endpoints & Architecture</span>
+      <span>Enforced API Endpoints</span>
       <span class="badge">JWT Bearer Auth</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-post">POST</span> <span class="api-path">/api/auth/login</span></div>
-      <span style="font-size:0.75rem; color:var(--text-muted);">Authenticates user & generates JWT</span>
+      <span style="font-size:0.7rem; color:var(--text-muted);">JWT Login</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-route</span></div>
-      <span style="font-size:0.75rem; color:#60A5FA;">Assigned Route & Stops</span>
+      <span style="font-size:0.7rem; color:#60A5FA;">User Route</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-vehicle</span></div>
-      <span style="font-size:0.75rem; color:#60A5FA;">Assigned Vehicle Details</span>
+      <span style="font-size:0.7rem; color:#60A5FA;">User Vehicle</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/current</span></div>
-      <span style="font-size:0.75rem; color:#34D399;">Live GPS Telemetry</span>
+      <span style="font-size:0.7rem; color:#34D399;">Live Telemetry</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/history</span></div>
-      <span style="font-size:0.75rem; color:var(--text-muted);">Historical Breadcrumb Logs</span>
+      <span style="font-size:0.7rem; color:var(--text-muted);">GPS Logs</span>
     </div>
 
     <div class="api-item">
       <div><span class="api-method method-post">POST</span> <span class="api-path">/api/gps/ingest</span></div>
-      <span style="font-size:0.75rem; color:var(--accent-amber);">MQTT / REST Telemetry Ingest</span>
+      <span style="font-size:0.7rem; color:var(--accent-amber);">MQTT / REST Ingest</span>
     </div>
 
-    <div style="background:linear-gradient(135deg, #064E3B, #065F46); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:14px; margin-top:16px;">
-      <h4 style="font-size:0.9rem; font-weight:700; color:#6EE7B7;"><i class="fa-solid fa-shield-check"></i> Strict Backend Authorization Active</h4>
-      <p style="font-size:0.78rem; color:#A7F3D0; margin-top:4px;">Backend guarantees that <strong>User A</strong> only accesses <strong>Route A & BUS-001</strong>, and <strong>User B</strong> only accesses <strong>Route B & BUS-002</strong>. Any cross-access is strictly protected at the API dependency layer.</p>
+    <div style="background:linear-gradient(135deg, #064E3B, #065F46); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:12px; margin-top:10px;">
+      <h4 style="font-size:0.85rem; font-weight:700; color:#6EE7B7;"><i class="fa-solid fa-shield-check"></i> Strict Backend Security</h4>
+      <p style="font-size:0.74rem; color:#A7F3D0; margin-top:3px;">User A access is restricted to Route A & BUS-001, and User B to Route B & BUS-002. Enforced at API layer.</p>
     </div>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  const waypoints = [
-    [13.0827, 80.2707], [13.0694, 80.2741], [13.0612, 80.2642],
-    [13.0560, 80.2520], [13.0489, 80.2505], [13.0418, 80.2341],
-    [13.0232, 80.2223], [13.0067, 80.2052], [12.9856, 80.1693], [12.9715, 80.1601]
+  const routeA_data = [
+    { name: "Central Railway Station", lat: 13.0827, lng: 80.2707, is_stop: true },
+    { name: "Government Estate", lat: 13.0694, lng: 80.2741, is_stop: true },
+    { name: "LIC / Mount Road", lat: 13.0612, lng: 80.2642, is_stop: false },
+    { name: "Thousand Lights", lat: 13.0560, lng: 80.2520, is_stop: true },
+    { name: "Gemini Flyover", lat: 13.0489, lng: 80.2505, is_stop: false },
+    { name: "T. Nagar Bus Terminus", lat: 13.0418, lng: 80.2341, is_stop: true },
+    { name: "Saidapet Metro", lat: 13.0232, lng: 80.2223, is_stop: true },
+    { name: "Guindy Industrial Estate", lat: 13.0067, lng: 80.2052, is_stop: true },
+    { name: "Airport International Terminal", lat: 12.9856, lng: 80.1693, is_stop: true },
+    { name: "Tech Park Campus OMR", lat: 12.9715, lng: 80.1601, is_stop: true }
+  ];
+
+  const routeB_data = [
+    { name: "Marina Beach Plaza", lat: 13.0500, lng: 80.2824, is_stop: true },
+    { name: "Santhome Cathedral", lat: 13.0336, lng: 80.2778, is_stop: true },
+    { name: "Adyar Signal", lat: 13.0064, lng: 80.2573, is_stop: true },
+    { name: "IIT Madras Main Gate", lat: 13.0033, lng: 80.2392, is_stop: true },
+    { name: "Tidel Park / Tharamani", lat: 12.9888, lng: 80.2476, is_stop: true },
+    { name: "SRP Tools Junction", lat: 12.9774, lng: 80.2458, is_stop: false },
+    { name: "Kandanchavadi OMR", lat: 12.9665, lng: 80.2443, is_stop: true },
+    { name: "Perungudi Tech Hub", lat: 12.9560, lng: 80.2431, is_stop: true },
+    { name: "Thoraipakkam Junction", lat: 12.9405, lng: 80.2370, is_stop: true },
+    { name: "Innovation Valley Campus", lat: 12.9250, lng: 80.2300, is_stop: true }
   ];
 
   function interpolate(p1, p2, steps) {
@@ -155,30 +200,89 @@
     return pts;
   }
 
-  const fullPath = [];
-  for (let i = 0; i < waypoints.length - 1; i++) fullPath.push(...interpolate(waypoints[i], waypoints[i+1], 15));
-  for (let i = waypoints.length - 1; i > 0; i--) fullPath.push(...interpolate(waypoints[i], waypoints[i-1], 15));
+  function getFullPath(data) {
+    const wps = data.map(d => [d.lat, d.lng]);
+    const pts = [];
+    for (let i = 0; i < wps.length - 1; i++) pts.push(...interpolate(wps[i], wps[i+1], 14));
+    for (let i = wps.length - 1; i > 0; i--) pts.push(...interpolate(wps[i], wps[i-1], 14));
+    return pts;
+  }
 
-  let map, marker, step = 0;
+  let activeRouteData = routeA_data;
+  let activePath = getFullPath(routeA_data);
+  let map, poly, marker, stopMarkers = [], step = 0;
+
+  function renderTimeline(data) {
+    const container = document.getElementById('stopsTimeline');
+    container.innerHTML = '';
+    data.forEach((wp, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === data.length - 1;
+      const div = document.createElement('div');
+      div.className = 'timeline-item';
+      div.innerHTML = `
+        <div class="timeline-dot ${isFirst ? 'origin' : isLast ? 'dest' : ''}"></div>
+        <div class="timeline-text">
+          <div class="timeline-name">${wp.name} ${wp.is_stop ? '<span style="color:#60A5FA; font-size:0.7rem;">• Stop</span>' : ''}</div>
+          <div class="timeline-desc">${wp.lat.toFixed(4)}, ${wp.lng.toFixed(4)}</div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function switchRoute(mode) {
+    document.getElementById('btnUserA').classList.toggle('active', mode === 'A');
+    document.getElementById('btnUserB').classList.toggle('active', mode === 'B');
+    document.getElementById('routeHeader').innerText = mode === 'A' ? 'Route A (North Express)' : 'Route B (South Coastal Link)';
+
+    activeRouteData = mode === 'A' ? routeA_data : routeB_data;
+    activePath = getFullPath(activeRouteData);
+    step = 0;
+    renderTimeline(activeRouteData);
+    drawMapRoute();
+  }
+
+  function drawMapRoute() {
+    stopMarkers.forEach(m => map.removeLayer(m));
+    stopMarkers = [];
+    if (poly) map.removeLayer(poly);
+
+    const latlngs = activeRouteData.map(d => [d.lat, d.lng]);
+    poly = L.polyline(latlngs, { color: '#3B82F6', weight: 5, opacity: 0.8 }).addTo(map);
+    map.fitBounds(poly.getBounds(), { padding: [30, 30] });
+
+    activeRouteData.forEach((d, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === activeRouteData.length - 1;
+      const m = L.circleMarker([d.lat, d.lng], {
+        radius: isFirst || isLast ? 7 : 4.5,
+        color: isFirst ? '#10B981' : isLast ? '#EF4444' : '#3B82F6',
+        fillColor: isFirst ? '#10B981' : isLast ? '#EF4444' : '#3B82F6',
+        fillOpacity: 1
+      }).bindPopup(`<b>${d.name}</b><br>${isFirst ? 'Origin' : isLast ? 'Destination' : 'Bus Stop'}`).addTo(map);
+      stopMarkers.push(m);
+    });
+
+    if (marker) marker.setLatLng(activePath[0]);
+  }
 
   window.onload = () => {
-    map = L.map('map').setView(waypoints[0], 12);
+    map = L.map('map').setView([13.0827, 80.2707], 12);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
 
-    L.polyline(waypoints, { color: '#3B82F6', weight: 5, opacity: 0.8 }).addTo(map);
-    waypoints.forEach((p, idx) => {
-      L.circleMarker(p, { radius: idx === 0 || idx === waypoints.length-1 ? 7 : 4, color: idx === 0 ? '#10B981' : idx === waypoints.length-1 ? '#EF4444' : '#3B82F6', fillColor: idx === 0 ? '#10B981' : '#3B82F6', fillOpacity: 1 }).addTo(map);
-    });
+    renderTimeline(activeRouteData);
+    drawMapRoute();
 
     const busIcon = L.divIcon({
       html: '<div style="background:#2563EB; border:2px solid white; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.5);"><i class="fa-solid fa-bus"></i></div>',
       iconSize: [32, 32], iconAnchor: [16, 16]
     });
-    marker = L.marker(fullPath[0], { icon: busIcon }).addTo(map);
+    marker = L.marker(activePath[0], { icon: busIcon }).addTo(map);
 
     setInterval(() => {
-      step = (step + 1) % fullPath.length;
-      const pt = fullPath[step];
+      step = (step + 1) % activePath.length;
+      const pt = activePath[step];
       marker.setLatLng(pt);
       document.getElementById('simCoords').innerText = `Coords: ${pt[0].toFixed(4)}, ${pt[1].toFixed(4)}`;
       document.getElementById('simSpeed').innerText = `Speed: ${(36 + Math.sin(step) * 8).toFixed(1)} km/h`;
