@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastAPI GPS Vehicle Tracking Backend - Live Interactive Showcase</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0B0F17;
+      --card-bg: #111827;
+      --card-border: #1F2937;
+      --primary: #3B82F6;
+      --accent-cyan: #06B6D4;
+      --accent-green: #10B981;
+      --accent-amber: #F59E0B;
+      --text-main: #F9FAFB;
+      --text-muted: #9CA3AF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      background: rgba(17, 24, 39, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.2rem; }
+    .brand-icon { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #2563EB, #06B6D4); display: flex; align-items: center; justify-content: center; }
+    .badge { background: rgba(59, 130, 246, 0.15); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    
+    .hero { text-align: center; padding: 40px 20px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #FFF, #93C5FD); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 10px; line-height: 1.6; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 24px; width: 100%; flex: 1; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; padding: 24px; }
+    .card-title { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+
+    .api-item { background: #1A2234; border: 1px solid #233044; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .api-method { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    .method-get { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+    .method-post { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+    .api-path { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-main); margin-left: 10px; }
+
+    #map { height: 420px; border-radius: 14px; border: 1px solid var(--card-border); width: 100%; z-index: 1; }
+    
+    .btn { padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-server"></i></div>
+    <span>GPS Tracking FastAPI Backend</span>
+    <span class="badge">GitHub Pages Live Showcase</span>
+  </div>
+  <div>
+    <a href="https://github.com/aswinkarthikv/gps-vehicle-tracking-backend" target="_blank" class="btn btn-outline">
+      <i class="fa-brands fa-github"></i> View Backend Code
+    </a>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Python FastAPI + MQTT Telemetry Backend</h1>
+  <p>Production-ready REST & MQTT telemetry engine enforcing strict route/vehicle authorization isolation, PostgreSQL/SQLite ORM persistence, and Docker Compose orchestration.</p>
+</div>
+
+<div class="grid">
+  <!-- Left: Interactive Map Simulation -->
+  <div class="card">
+    <div class="card-title">
+      <span>Live Route & GPS Telemetry Simulator</span>
+      <span style="color:#10B981; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Simulating Live</span>
+    </div>
+    <div id="map"></div>
+    <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.85rem; color:var(--text-muted);">
+      <span id="simSpeed">Speed: 42.5 km/h</span>
+      <span id="simCoords">Coords: 13.0827, 80.2707</span>
+      <span id="simStatus" style="color:#10B981; font-weight:700;">IN_TRANSIT</span>
+    </div>
+  </div>
+
+  <!-- Right: API Endpoints & Auth Isolation Breakdown -->
+  <div class="card">
+    <div class="card-title">
+      <span>Enforced API Endpoints & Security</span>
+      <span class="badge">JWT Bearer Auth</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-post">POST</span> <span class="api-path">/api/auth/login</span></div>
+      <span style="font-size:0.75rem; color:var(--text-muted);">Authenticates user & generates JWT</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-route</span></div>
+      <span style="font-size:0.75rem; color:#60A5FA;">Strict: User Route Only</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-get">GET</span> <span class="api-path">/api/user/assigned-vehicle</span></div>
+      <span style="font-size:0.75rem; color:#60A5FA;">Strict: User Vehicle Only</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/current</span></div>
+      <span style="font-size:0.75rem; color:#34D399;">Live GPS Position & Speed</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-get">GET</span> <span class="api-path">/api/tracking/history</span></div>
+      <span style="font-size:0.75rem; color:var(--text-muted);">GPS Historical Breadcrumb Logs</span>
+    </div>
+
+    <div class="api-item">
+      <div><span class="api-method method-post">POST</span> <span class="api-path">/api/gps/ingest</span></div>
+      <span style="font-size:0.75rem; color:var(--accent-amber);">MQTT / REST Telemetry Ingest</span>
+    </div>
+
+    <div style="background:linear-gradient(135deg, #1E3A8A, #172554); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:14px; margin-top:16px;">
+      <h4 style="font-size:0.9rem; font-weight:700; color:#93C5FD;"><i class="fa-solid fa-lock"></i> Strict Authorization Rule Verified</h4>
+      <p style="font-size:0.78rem; color:#BFDBFE; margin-top:4px;">User A (Route A / BUS-001) querying Vehicle 2 receives <strong>HTTP 403 Forbidden - Access Denied</strong> automatically enforced by the FastAPI dependency layer.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const waypoints = [
+    [13.0827, 80.2707], [13.0694, 80.2741], [13.0612, 80.2642],
+    [13.0560, 80.2520], [13.0489, 80.2505], [13.0418, 80.2341],
+    [13.0232, 80.2223], [13.0067, 80.2052], [12.9856, 80.1693], [12.9715, 80.1601]
+  ];
+
+  function interpolate(p1, p2, steps) {
+    const pts = [];
+    for (let i = 0; i < steps; i++) {
+      const t = i / steps;
+      pts.push([p1[0] + t * (p2[0] - p1[0]), p1[1] + t * (p2[1] - p1[1])]);
+    }
+    return pts;
+  }
+
+  const fullPath = [];
+  for (let i = 0; i < waypoints.length - 1; i++) fullPath.push(...interpolate(waypoints[i], waypoints[i+1], 15));
+  for (let i = waypoints.length - 1; i > 0; i--) fullPath.push(...interpolate(waypoints[i], waypoints[i-1], 15));
+
+  let map, marker, step = 0;
+
+  window.onload = () => {
+    map = L.map('map').setView(waypoints[0], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+
+    L.polyline(waypoints, { color: '#3B82F6', weight: 5, opacity: 0.8 }).addTo(map);
+    waypoints.forEach((p, idx) => {
+      L.circleMarker(p, { radius: idx === 0 || idx === waypoints.length-1 ? 7 : 4, color: idx === 0 ? '#10B981' : idx === waypoints.length-1 ? '#EF4444' : '#3B82F6', fillColor: idx === 0 ? '#10B981' : '#3B82F6', fillOpacity: 1 }).addTo(map);
+    });
+
+    const busIcon = L.divIcon({
+      html: '<div style="background:#2563EB; border:2px solid white; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.5);"><i class="fa-solid fa-bus"></i></div>',
+      iconSize: [32, 32], iconAnchor: [16, 16]
+    });
+    marker = L.marker(fullPath[0], { icon: busIcon }).addTo(map);
+
+    setInterval(() => {
+      step = (step + 1) % fullPath.length;
+      const pt = fullPath[step];
+      marker.setLatLng(pt);
+      document.getElementById('simCoords').innerText = `Coords: ${pt[0].toFixed(4)}, ${pt[1].toFixed(4)}`;
+      document.getElementById('simSpeed').innerText = `Speed: ${(36 + Math.sin(step) * 8).toFixed(1)} km/h`;
+    }, 1800);
+  };
+</script>
+</body>
+</html>
