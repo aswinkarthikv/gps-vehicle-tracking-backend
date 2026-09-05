@@ -1,0 +1,53 @@
+﻿services:
+  # 1. PostgreSQL Database Service
+  db:
+    image: postgres:16-alpine
+    container_name: vehicle_tracker_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: tracker_user
+      POSTGRES_PASSWORD: tracker_password
+      POSTGRES_DB: vehicle_tracker_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracker_user -d vehicle_tracker_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Eclipse Mosquitto MQTT Broker Service
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: vehicle_tracker_mqtt
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  # 3. FastAPI Backend Service
+  backend:
+    build: .
+    container_name: vehicle_tracker_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      mqtt:
+        condition: service_started
+    environment:
+      - DATABASE_URL=postgresql://tracker_user:tracker_password@db:5432/vehicle_tracker_db
+      - MQTT_BROKER_HOST=mqtt
+      - MQTT_BROKER_PORT=1883
+      - MQTT_TOPIC_PREFIX=vehicle/telemetry
+      - MQTT_ENABLED=true
+      - SECRET_KEY=super-secret-jwt-key-for-assessment-evaluation-change-in-prod-2026
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
