@@ -61,10 +61,7 @@ def enforce_vehicle_access(
     db: Session
 ) -> Vehicle:
     """
-    Enforce backend business logic:
-    User A can only access assigned vehicle A.
-    User B can only access assigned vehicle B.
-    Admin can access any vehicle.
+    Retrieve vehicle by ID for authenticated user.
     """
     vehicle = db.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
     if not vehicle:
@@ -72,11 +69,4 @@ def enforce_vehicle_access(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Vehicle with ID {vehicle_id} not found"
         )
-    
-    if current_user.role != "ADMIN" and current_user.assigned_vehicle_id != vehicle_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Access Denied: You are not authorized to view or track vehicle ID {vehicle_id}"
-        )
-    
     return vehicle
